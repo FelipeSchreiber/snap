@@ -63,10 +63,13 @@ int main(int argc, char* argv[]) {
   }
   // THash < TIntPr, TFlt > edges = TAGM::ModifiedGenAGM(CmtyVV,CProbV, CLambdasV, Rnd, PNoCom);
   THash < TIntPr, TFlt > edges = TAGM::ModifiedGenAGM(CmtyVV, DensityCoef, ScaleCoef, Rnd);
+  TFlt weight = 0;
+  TInt cmntyNo = 0;
   FILE *F = fopen((OutFPrx + ".txt").CStr(), "wt");
   for (THash < TIntPr, TFlt >::TIter it = edges.BegI(); it < edges.EndI(); it++)
   {
-    TFlt weight = Rnd.GetExpDev(CLambdasV[(int) it->Dat]);
+    cmntyNo =  (int) it->Dat;
+    weight = Rnd.GetExpDev(CLambdasV[cmntyNo]);
     fprintf(F,"%d %d %f\n",it->Key.GetVal1(),it->Key.GetVal2(),weight);
   }
   fclose(F);
