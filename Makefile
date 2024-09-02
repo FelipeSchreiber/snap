@@ -8,6 +8,8 @@ test: TestAll
 
 core: MakeCore
 
+agmgen2: MakeAgm
+
 MakeAll:
 	$(MAKE) -C snap-core
 	$(MAKE) -C examples
@@ -17,6 +19,10 @@ TestAll:
 
 MakeCore:
 	$(MAKE) -C snap-core
+
+MakeAgm:
+	$(MAKE) -C snap-core
+	$(MAKE) -C examples/agmgen2
 
 clean:
 	$(MAKE) clean -C snap-core
