@@ -43,9 +43,9 @@ void TAGM::ModifiedRndConnectInsideCommunity(PUNGraph& Graph, const TIntV& CmtyV
     if (SrcNId != DstNId && ! NewEdgeSet.IsKey(TIntPr(SrcNId, DstNId))) { // is new edge
       NewEdgeSet.AddKey(TIntPr(SrcNId, DstNId));
       TIntPr mypair(SrcNId,DstNId);
-      TFlt weight = Rnd.GetExpDev(1);
-      //edges.AddDat( mypair , (float) cmtyNumber);
-      edges.AddDat( mypair , weight);
+      // TFlt weight = Rnd.GetExpDev(1);
+      edges.AddDat( mypair , (float) cmtyNumber);
+      // edges.AddDat( mypair , weight);
       Graph->AddEdge(SrcNId, DstNId);
       edge++; 
     } 

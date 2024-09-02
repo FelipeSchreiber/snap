@@ -13,6 +13,7 @@ int main(int argc, char* argv[]) {
   const double ScaleCoef= Env.GetIfArgPrefixFlt("-c:", 1.3, "Scaling Coefficient c of density (density ~ c");
   const bool Draw = Env.GetIfArgPrefixBool("-d:", false, "Use GraphViz to draw the generated graph.");
   const TStr InProbs = Env.GetIfArgPrefixStr("-p:", "0.5,0.6,0.7", "Community probs data");
+  const TStr InLambdas = Env.GetIfArgPrefixStr("-l:", "0.5,0.6,0.7", "Community lambda for exponential weights");
   const double PNoCom = Env.GetIfArgPrefixFlt("-pn:", 0.5, "prob of no communities");
   TStrV split_str;
   const char delim[] = ",";
@@ -22,6 +23,14 @@ int main(int argc, char* argv[]) {
   {
     CProbV.Add(it->GetFlt());
   }
+
+  InLambdas.SplitOnAllCh(*delim,split_str);
+  TFltV CLambdasV;
+  for (TVec<TStr>::TIter it = split_str.BegI(); it < split_str.EndI(); it++)
+  {
+    CLambdasV.Add(it->GetFlt());
+  }
+
   TRnd Rnd(RndSeed);
   TVec<TIntV> CmtyVV;
   if(InFNm == "DEMO") {
@@ -52,12 +61,13 @@ int main(int argc, char* argv[]) {
     }
     printf("\nCommunity loading completed (%d communities, %d memberships)\n", CmtyVV.Len(), Membs);
   }
-  // THash < TIntPr, TFlt > edges = TAGM::ModifiedGenAGM(CmtyVV,CProbV, Rnd, PNoCom);
+  // THash < TIntPr, TFlt > edges = TAGM::ModifiedGenAGM(CmtyVV,CProbV, CLambdasV, Rnd, PNoCom);
   THash < TIntPr, TFlt > edges = TAGM::ModifiedGenAGM(CmtyVV, DensityCoef, ScaleCoef, Rnd);
   FILE *F = fopen((OutFPrx + ".txt").CStr(), "wt");
   for (THash < TIntPr, TFlt >::TIter it = edges.BegI(); it < edges.EndI(); it++)
   {
-    fprintf(F,"%d %d %f\n",it->Key.GetVal1(),it->Key.GetVal2(),it->Dat);
+    TFlt weight = Rnd.GetExpDev(CLambdasV[(int) it->Dat]);
+    fprintf(F,"%d %d %f\n",it->Key.GetVal1(),it->Key.GetVal2(),weight);
   }
   fclose(F);
   Catch
