@@ -12,8 +12,8 @@ int main(int argc, char* argv[]) {
   const double DensityCoef= Env.GetIfArgPrefixFlt("-a:", 0.6, "Power-law Coefficient a of density (density ~ N^(-a)");
   const double ScaleCoef= Env.GetIfArgPrefixFlt("-c:", 1.3, "Scaling Coefficient c of density (density ~ c");
   const bool Draw = Env.GetIfArgPrefixBool("-d:", false, "Use GraphViz to draw the generated graph.");
-  const TStr InProbs = Env.GetIfArgPrefixStr("-p:", "0.5,0.6,0.7", "Community probs data");
-  const TStr InLambdas = Env.GetIfArgPrefixStr("-l:", "0.5,0.6,0.7", "Community lambda for exponential weights");
+  const TStr InProbs = Env.GetIfArgPrefixStr("-p:", "", "Community probs data");
+  const TStr InLambdas = Env.GetIfArgPrefixStr("-l:", "", "Community lambda for exponential weights");
   const double PNoCom = Env.GetIfArgPrefixFlt("-pn:", 0.5, "prob of no communities");
   TStrV split_str;
   const char delim[] = ",";
@@ -63,14 +63,21 @@ int main(int argc, char* argv[]) {
   }
   THash < TIntPr, TFlt > edges;
   if(InProbs.Len() > 0)
+  {
+    printf("\nCalling AGM with probs %s\n",InProbs.CStr());
     edges = TAGM::ModifiedGenAGM(CmtyVV,CProbV, Rnd, PNoCom);
+  }
   else
+  {
+    printf("\nCalling AGM with DensityCoef %f and ScaleCoef %f\n",DensityCoef,ScaleCoef);
     edges = TAGM::ModifiedGenAGM(CmtyVV, DensityCoef, ScaleCoef, Rnd);
+  }
   TFlt weight = 0;
   TInt cmntyNo = 0;
   FILE *F = fopen((OutFPrx + ".txt").CStr(), "wt");
   if(InLambdas.Len() > 0)
   {
+    printf("\nPRODUCING WEIGHTS FOR EACH EDGE\n");
     for (THash < TIntPr, TFlt >::TIter it = edges.BegI(); it < edges.EndI(); it++)
     {
       cmntyNo =  (int) it->Dat;
@@ -80,6 +87,7 @@ int main(int argc, char* argv[]) {
   }
   else
   {
+    printf("\nPRODUCING ONLY cmntyNo for each edge\n");
     for (THash < TIntPr, TFlt >::TIter it = edges.BegI(); it < edges.EndI(); it++)
     {
       cmntyNo =  (int) it->Dat;
