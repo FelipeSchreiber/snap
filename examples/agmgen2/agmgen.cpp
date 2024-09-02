@@ -61,16 +61,30 @@ int main(int argc, char* argv[]) {
     }
     printf("\nCommunity loading completed (%d communities, %d memberships)\n", CmtyVV.Len(), Membs);
   }
-  // THash < TIntPr, TFlt > edges = TAGM::ModifiedGenAGM(CmtyVV,CProbV, CLambdasV, Rnd, PNoCom);
-  THash < TIntPr, TFlt > edges = TAGM::ModifiedGenAGM(CmtyVV, DensityCoef, ScaleCoef, Rnd);
+  THash < TIntPr, TFlt > edges;
+  if(InProbs.Len() > 0)
+    edges = TAGM::ModifiedGenAGM(CmtyVV,CProbV, Rnd, PNoCom);
+  else
+    edges = TAGM::ModifiedGenAGM(CmtyVV, DensityCoef, ScaleCoef, Rnd);
   TFlt weight = 0;
   TInt cmntyNo = 0;
   FILE *F = fopen((OutFPrx + ".txt").CStr(), "wt");
-  for (THash < TIntPr, TFlt >::TIter it = edges.BegI(); it < edges.EndI(); it++)
+  if(InLambdas.Len() > 0)
   {
-    cmntyNo =  (int) it->Dat;
-    weight = Rnd.GetExpDev(CLambdasV[cmntyNo]);
-    fprintf(F,"%d %d %f\n",it->Key.GetVal1(),it->Key.GetVal2(),weight);
+    for (THash < TIntPr, TFlt >::TIter it = edges.BegI(); it < edges.EndI(); it++)
+    {
+      cmntyNo =  (int) it->Dat;
+      weight = Rnd.GetExpDev(CLambdasV[cmntyNo]);
+      fprintf(F,"%d %d %f\n",it->Key.GetVal1(),it->Key.GetVal2(),weight);
+    }
+  }
+  else
+  {
+    for (THash < TIntPr, TFlt >::TIter it = edges.BegI(); it < edges.EndI(); it++)
+    {
+      cmntyNo =  (int) it->Dat;
+      fprintf(F,"%d %d %d\n",it->Key.GetVal1(),it->Key.GetVal2(),cmntyNo);
+    }
   }
   fclose(F);
   Catch
