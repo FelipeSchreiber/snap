@@ -11,14 +11,13 @@
 class TAGM {
 public:
   static void RndConnectInsideCommunity(PUNGraph& Graph, const TIntV& CmtyV, const double& Prob, TRnd& Rnd);
-  static void ModifiedRndConnectInsideCommunity(PUNGraph& Graph, const TIntV& CmtyV, const double& Prob, TRnd& Rnd, TVec< TVec<TInt> >  & edges, TInt cmtyNumber);
+  static void ModifiedRndConnectInsideCommunity(PUNGraph& Graph, const TIntV& CmtyV, const double& Prob, TRnd& Rnd, THash < TIntPr, TFlt >& edges, TInt cmtyNumber);
   // OP RS 2014/04/10, commented out since there is no implementation  
   //static PUNGraph GenAGM(const TIntV& NIdV , THash<TInt,TIntV >& CmtyVH, const TStr& AGMNm, const double& PiCoef, const double& ProbBase, TRnd& Rnd=TInt::Rnd);
-  static PUNGraph GenAGM(TVec<TIntV >& CmtyVV, const double& DensityCoef, const double& ScaleCoef, TRnd& Rnd=TInt::Rnd);
-  static PUNGraph GenAGM(TVec<TIntV>& CmtyVV, const double& DensityCoef, const int TargetEdges, TRnd& Rnd);
-  static PUNGraph GenAGM(TVec<TIntV>& CmtyVV, const TFltV& CProbV, TRnd& Rnd, const double PNoCom = -1.0);
+  static THash < TIntPr, TFlt > ModifiedGenAGM(TVec<TIntV >& CmtyVV, const double& DensityCoef, const double& ScaleCoef, TRnd& Rnd=TInt::Rnd);
+  static THash < TIntPr, TFlt > ModifiedGenAGM(TVec<TIntV>& CmtyVV, const double& DensityCoef, const int TargetEdges, TRnd& Rnd);
   // This function not only generates the AGM, but also stores an edgelist of three int's: u - v and the community that generated the edge
-  static TVec< TVec<TInt> >  ModifiedGenAGM(TVec<TIntV>& CmtyVV, const TFltV& CProbV, TRnd& Rnd, const double PNoCom = -1.0);
+  static THash < TIntPr, TFlt > ModifiedGenAGM(TVec<TIntV>& CmtyVV, const TFltV& CProbV, TRnd& Rnd, const double PNoCom = -1.0);
 };
 
 /////////////////////////////////////////////////

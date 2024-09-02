@@ -52,33 +52,14 @@ int main(int argc, char* argv[]) {
     }
     printf("\nCommunity loading completed (%d communities, %d memberships)\n", CmtyVV.Len(), Membs);
   }
-  TVec< TVec<TInt> > edges = TAGM::ModifiedGenAGM(CmtyVV,CProbV, Rnd, PNoCom);
+  // THash < TIntPr, TFlt > edges = TAGM::ModifiedGenAGM(CmtyVV,CProbV, Rnd, PNoCom);
+  THash < TIntPr, TFlt > edges = TAGM::ModifiedGenAGM(CmtyVV, DensityCoef, ScaleCoef, Rnd);
   FILE *F = fopen((OutFPrx + ".txt").CStr(), "wt");
-  for (TVec< TVec<TInt> >::TIter it = edges.BegI(); it < edges.EndI(); it++)
+  for (THash < TIntPr, TFlt >::TIter it = edges.BegI(); it < edges.EndI(); it++)
   {
-    fprintf(F,"%d %d %d\n",(*it)[0],(*it)[1],(*it)[2]);
+    fprintf(F,"%d %d %f\n",it->Key.GetVal1(),it->Key.GetVal2(),it->Dat);
   }
   fclose(F);
-  THash < TIntPr, TFlt > myhash;
-  TIntPr mypair(34,13);
-  myhash.AddDat(mypair,0.4);
-  TInt edgeId = myhash.GetKeyId(mypair);
-  printf("\nOK: %f\n",myhash[edgeId]);
-  myhash[edgeId] = 0.7;
-  printf("\nOK: %f\n",myhash[edgeId]);
-  //myhash.AddDat(mypair,0.4);
-  FILE *F = fopen("agua.txt", "wt");
-  for (THash < TIntPr, TFlt >::TIter it = myhash.BegI(); it < myhash.EndI(); it++)
-  {
-    printf("\nok\n");
-    printf("%d %d %f\n",it->Key.GetVal1(),it->Key.GetVal2(),it->Dat);
-  }
-  fclose(F);
-  // PUNGraph AG = TAGM::GenAGM(CmtyVV, DensityCoef, ScaleCoef, Rnd);
-  // TSnap::SaveEdgeList(AG, OutFPrx + ".txt");
-  // if (Draw && AG->GetNodes() < 50) {
-  //   TAGMUtil::GVizComGraph(AG, CmtyVV, OutFPrx + ".graph.gif");
-  // }
   Catch
   printf("\nrun time: %s (%s)\n", ExeTm.GetTmStr(), TSecTm::GetCurTm().GetTmStr().CStr());
   return 0;

@@ -28,7 +28,7 @@ void TAGM::RndConnectInsideCommunity(PUNGraph& Graph, const TIntV& CmtyV, const 
 }
 
 ///Connect members of a given community by Erdos-Renyi, and stores the edges in a vector
-void TAGM::ModifiedRndConnectInsideCommunity(PUNGraph& Graph, const TIntV& CmtyV, const double& Prob, TRnd& Rnd, TVec< TVec<TInt> > & edges, TInt cmtyNumber){
+void TAGM::ModifiedRndConnectInsideCommunity(PUNGraph& Graph, const TIntV& CmtyV, const double& Prob, TRnd& Rnd, THash < TIntPr, TFlt >  & edges, TInt cmtyNumber){
   int CNodes = CmtyV.Len(), CEdges;
   if (CNodes < 20) {
     CEdges = (int) Rnd.GetBinomialDev(Prob, CNodes * (CNodes-1) / 2);
@@ -42,25 +42,23 @@ void TAGM::ModifiedRndConnectInsideCommunity(PUNGraph& Graph, const TIntV& CmtyV
     if (SrcNId > DstNId) { Swap(SrcNId,DstNId); }
     if (SrcNId != DstNId && ! NewEdgeSet.IsKey(TIntPr(SrcNId, DstNId))) { // is new edge
       NewEdgeSet.AddKey(TIntPr(SrcNId, DstNId));
-      TVec<TInt> MyVec;
-      MyVec.Reserve(3);
-      MyVec.Add(SrcNId);
-      MyVec.Add(DstNId);
-      MyVec.Add(cmtyNumber);
-      edges.Add(MyVec);
+      TIntPr mypair(SrcNId,DstNId);
+      TFlt weight = Rnd.GetExpDev(1);
+      //edges.AddDat( mypair , (float) cmtyNumber);
+      edges.AddDat( mypair , weight);
       Graph->AddEdge(SrcNId, DstNId);
       edge++; 
     } 
   }
 }
 
-PUNGraph TAGM::GenAGM(TVec<TIntV>& CmtyVV, const double& DensityCoef, const int TargetEdges, TRnd& Rnd){
-  PUNGraph TryG = TAGM::GenAGM(CmtyVV, DensityCoef, 1.0, Rnd);
-  const double ScaleCoef = (double) TargetEdges / (double) TryG->GetEdges();
-  return TAGM::GenAGM(CmtyVV, DensityCoef, ScaleCoef, Rnd);
+THash < TIntPr, TFlt > TAGM::ModifiedGenAGM(TVec<TIntV>& CmtyVV, const double& DensityCoef, const int TargetEdges, TRnd& Rnd){
+  THash < TIntPr, TFlt > TryG = TAGM::ModifiedGenAGM(CmtyVV, DensityCoef, 1.0, Rnd);
+  const double ScaleCoef = (double) TargetEdges / (double) TryG.Len();
+  return TAGM::ModifiedGenAGM(CmtyVV, DensityCoef, ScaleCoef, Rnd);
 }
 
-PUNGraph TAGM::GenAGM(TVec<TIntV>& CmtyVV, const double& DensityCoef, const double& ScaleCoef, TRnd& Rnd){
+THash < TIntPr, TFlt > TAGM::ModifiedGenAGM(TVec<TIntV>& CmtyVV, const double& DensityCoef, const double& ScaleCoef, TRnd& Rnd){
   TFltV CProbV;
   double Prob;
   for (int i = 0; i < CmtyVV.Len(); i++) {
@@ -68,42 +66,13 @@ PUNGraph TAGM::GenAGM(TVec<TIntV>& CmtyVV, const double& DensityCoef, const doub
     if (Prob > 1.0) { Prob = 1; }
     CProbV.Add(Prob);
   }
-  return TAGM::GenAGM(CmtyVV, CProbV, Rnd);
-}
-
-///Generate graph using the AGM model. CProbV = vector of Pc
-PUNGraph TAGM::GenAGM(TVec<TIntV>& CmtyVV, const TFltV& CProbV, TRnd& Rnd, const double PNoCom){
-  PUNGraph G = TUNGraph::New(100 * CmtyVV.Len(), -1);
-  printf("AGM begins\n");
-  for (int i = 0; i < CmtyVV.Len(); i++) {
-    TIntV& CmtyV = CmtyVV[i];
-    for (int u = 0; u < CmtyV.Len(); u++) {
-      if ( G->IsNode(CmtyV[u])) { continue; }
-      G->AddNode(CmtyV[u]);
-    }
-    double Prob = CProbV[i];
-    RndConnectInsideCommunity(G, CmtyV, Prob, Rnd);
-  }
-  if (PNoCom > 0.0) { //if we want to connect nodes that do not share any community
-    TIntSet NIDS;
-    for (int c = 0; c < CmtyVV.Len(); c++) {
-      for (int u = 0; u < CmtyVV[c].Len(); u++) {
-        NIDS.AddKey(CmtyVV[c][u]);
-      }
-    }
-    TIntV NIDV;
-    NIDS.GetKeyV(NIDV);
-    RndConnectInsideCommunity(G,NIDV,PNoCom,Rnd);
-  }
-  printf("AGM completed (%d nodes %d edges)\n",G->GetNodes(),G->GetEdges());
-  G->Defrag();
-  return G;
+  return TAGM::ModifiedGenAGM(CmtyVV,CProbV, Rnd);
 }
 
 
 ///Generate graph using the AGM model. CProbV = vector of Pc and stores the edges in an edgelist
-TVec< TVec<TInt> >  TAGM::ModifiedGenAGM(TVec<TIntV>& CmtyVV, const TFltV& CProbV, TRnd& Rnd, const double PNoCom){
-  TVec< TVec<TInt> > edges;
+THash < TIntPr, TFlt >  TAGM::ModifiedGenAGM(TVec<TIntV>& CmtyVV, const TFltV& CProbV, TRnd& Rnd, const double PNoCom){
+  THash < TIntPr, TFlt >  edges;
   PUNGraph G = TUNGraph::New(100 * CmtyVV.Len(), -1);
   printf("AGM begins\n");
   for (int i = 0; i < CmtyVV.Len(); i++) {
