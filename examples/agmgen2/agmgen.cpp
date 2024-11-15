@@ -74,7 +74,8 @@ int main(int argc, char* argv[]) {
   }
   TFlt weight = 0;
   TInt cmntyNo = 0;
-  FILE *F = fopen((OutFPrx + ".txt").CStr(), "wt");
+  //FILE *F = fopen((OutFPrx + ".txt").CStr(), "wt");
+  FILE *F = fopen(OutFPrx.CStr(), "wt");  
   if(InLambdas.Len() > 0)
   {
     printf("\nPRODUCING WEIGHTS FOR EACH EDGE\n");
