@@ -22,6 +22,12 @@ This file simply calls makefile and generate the modified agmgen2 executable fil
 ### agmgen
 This executable file outputs a txt file containing the edges of an undirected graph in the format "u v w", with vertices u and v and an additional information w. "w" can be either the weight of the edge, when the $\lambda$'s vector is passed, or is an integer indicating the intersection community between u and v that generated the edge.
 
+If the list containing probability of edge inside each community is passed, it will use these as default. Otherwise uses DensityCoef and ScaleCoef to infer them instead.
+
+```C++
+Prob = ScaleCoef*pow( double( CmtyVV[i].Len()), - DensityCoef);
+```
+
         Parameters:
             -i: Community affiliation data (one group per line). 
                 Use 'DEMO' to consider a simple case where Nodes 0-24 belong to 
