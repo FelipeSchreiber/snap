@@ -66,5 +66,8 @@ You must provide a bipartite graph file as input, which must follow this format:
 2 7 9 10 11 13 14 15 19
 ```
 Each line lists the vertices belonging to one community (or that is connected to a community vertice in the bipartite network). The bipartite network constains in one side the vertices of the graph, and in the other side the communities (which are the vertices 20, 21, 22 ommited in the file).
+
+
 ![alt text](image.png)
+
 taken from <a href="https://cs.stanford.edu/people/jure/pubs/agmfit-icdm12.pdf"> here </a>
