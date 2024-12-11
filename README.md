@@ -20,7 +20,7 @@ This file simply calls makefile and generate the modified agmgen2 executable fil
 - Usage: bash install_in_linux.sh
 
 ### agmgen
-This executable file outputs a txt file containing the edges of an undirected graph in the format "u v w", with vertices u and v and an additional information w. "w" can be either the weight of the edge, when the `$\Lambda$` 's vector is passed, or is an integer indicating the intersection community between u and v that generated the edge.
+This executable file outputs a txt file containing the edges of an undirected graph in the format "u v w", with vertices u and v and an additional information w. "w" can be either the weight of the edge, when the $\lambda$'s vector is passed, or is an integer indicating the intersection community between u and v that generated the edge.
 
         Parameters:
             -i: Community affiliation data (one group per line). 
