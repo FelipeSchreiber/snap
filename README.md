@@ -1,10 +1,10 @@
 # This is a fork from <a href="https://github.com/snap-stanford/snap">SNAP</a>repository!!!
-
+```
 ========================================================================
   SNAP : Stanford Network Analysis Platform
 	http://snap.stanford.edu
 ========================================================================
-
+```
 ## Objective:
 Simply modified the file agmgen to generate also weights comming from exponential distribution if a lambdas vector is passed or add the cluster number that generated the edge
 
@@ -58,4 +58,13 @@ str_lambdas = ",".join(lambdas)
 
 subprocess.run(["./agmgen","-i:bipartite.txt", "-a:0.6", "-c:1.3", "-o:agm_net.txt", "-l:%s"%str_lambdas, "-p:%s"%str_probs,f"-pn:{pn}"]) 
 ```
-
+## Important:
+You must provide a bipartite graph file as input, which must follow this format:
+```
+1 3 4 9 12 13 16
+0 2 5 8 14 18
+2 7 9 10 11 13 14 15 19
+```
+Each line lists the vertices belonging to one community (or that is connected to a community vertice in the bipartite network). The bipartite network constains in one side the vertices of the graph, and in the other side the communities (which are the vertices 20, 21, 22 ommited in the file).
+![alt text](image.png)
+taken from <a href="https://cs.stanford.edu/people/jure/pubs/agmfit-icdm12.pdf"> here </a>
