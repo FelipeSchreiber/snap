@@ -20,7 +20,7 @@ This file simply calls makefile and generate the modified agmgen2 executable fil
 - Usage: bash install_in_linux.sh
 
 ### agmgen
-This executable file outputs a txt file containing the edges of an undirected graph in the format "u v w", with vertices u and v and an additional information w. "w" can be either the weight of the edge, when the \Lambdas vector is passed, or is an integer indicating the intersection community between u and v that generated the edge.
+This executable file outputs a txt file containing the edges of an undirected graph in the format "u v w", with vertices u and v and an additional information w. "w" can be either the weight of the edge, when the \Lambda 's vector is passed, or is an integer indicating the intersection community between u and v that generated the edge.
 
         Parameters:
             -i: Community affiliation data (one group per line). 
@@ -33,7 +33,7 @@ This executable file outputs a txt file containing the edges of an undirected gr
             -c: Scaling constant for the edge probability.
             -l: The lambdas for exponential distributed weights
             -probs: the list with probability of edge inside each community
-            -pn: probability of non-edge
+            -pn: probability of edge between two disjoint vertices. When -1 the probability is 0.
 
 ```python
         subprocess.run(["./agmgen",\
@@ -55,6 +55,7 @@ probs = [str(round(i,2)) for i in np.random.uniform(0,1,k)]
 str_probs = ",".join(probs)
 lambdas = [str(round(i,2)) for i in np.random.rand(k+1)]
 str_lambdas = ",".join(lambdas)
+pn=-1
 
 subprocess.run(["./agmgen","-i:bipartite.txt", "-a:0.6", "-c:1.3", "-o:agm_net.txt", "-l:%s"%str_lambdas, "-p:%s"%str_probs,f"-pn:{pn}"]) 
 ```
