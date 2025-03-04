@@ -10,6 +10,8 @@ core: MakeCore
 
 agmgen2: MakeAgm
 
+bigclam: MakeBigClam
+
 MakeAll:
 	$(MAKE) -C snap-core
 	$(MAKE) -C examples
@@ -23,6 +25,10 @@ MakeCore:
 MakeAgm:
 	$(MAKE) -C snap-core
 	$(MAKE) -C examples/agmgen2
+
+MakeBigClam:
+	$(MAKE) -C snap-core
+	$(MAKE) -C examples/bigclam
 
 clean:
 	$(MAKE) clean -C snap-core
