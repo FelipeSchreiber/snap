@@ -35,6 +35,23 @@ void TAGMFast::Load(TSIn& SIn, const int& RndSeed) {
   Rnd.PutSeed(RndSeed);
 }
 
+void TAGMFast::InitFromFile(const TStr  InFNm) {
+  TVec<TIntV> CmtyVV;
+  int Membs = 0;
+  TSsParser Ss(InFNm, ssfWhiteSep);
+  while (Ss.Next()) {
+    if(Ss.GetFlds() > 0) {
+      TIntV CmtyV;
+      for(int i = 0; i < Ss.GetFlds(); i++) {
+        if (Ss.IsInt(i)) { CmtyV.Add(Ss.GetInt(i)); }
+      }
+      CmtyVV.Add(CmtyV);
+      Membs += CmtyV.Len();
+    }
+  }
+  TAGMFast::SetCmtyVV(CmtyVV);
+}
+
 void TAGMFast::RandomInit(const int InitComs) {
   F.Gen(G->GetNodes());
   SumFV.Gen(InitComs);
@@ -828,6 +845,8 @@ int TAGMFast::MLEGradAscentParallel(const double& Thres, const int& MaxIter, con
         NewF[ui] = CurFU;
         NewNIDV[ui] = u;
       }
+      // TAGM.GetCmtyVV(InitCmtyVV);
+      // TAGMUtil::DumpCmtyVV("INIT_cmtyvv.txt", InitCmtyVV);
     }
     int NumNoChangeGrad = 0;
     int NumNoChangeStepSize = 0;

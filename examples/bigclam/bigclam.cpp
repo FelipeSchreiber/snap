@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
   }
   printf("Graph: %d Nodes %d Edges\n", G->GetNodes(), G->GetEdges());
   
-  TVec<TIntV> EstCmtyVV;
+  TVec<TIntV> EstCmtyVV, InitCmtyVV;
   TExeTm RunTm;
   TAGMFast RAGM(G, 10, 10);
   
@@ -51,7 +51,23 @@ int main(int argc, char* argv[]) {
     OptComs = RAGM.FindComsByCV(NumThreads, MaxComs, MinComs, DivComs, OutFPrx, StepAlpha, StepBeta);
   }
 
-  RAGM.NeighborComInit(OptComs);
+  //CHANGING DEFAULT INITIALIZATION  RAGM.NeighborComInit(OptComs); -> RAGM.InitFromFile("INIT_cmtyvv.txt");
+  //Original
+  // RAGM.NeighborComInit(OptComs);
+
+  //Modified
+  RAGM.RandomInit(OptComs);
+  if (NumThreads == 1 || G->GetEdges() < 1000) {
+    RAGM.MLEGradAscent(0.0001, 3 , "", StepAlpha, StepBeta);
+  } else {
+    RAGM.MLEGradAscentParallel(0.0001, 3, NumThreads, "", StepAlpha, StepBeta);
+  }
+  RAGM.GetCmtyVV(InitCmtyVV);
+  TAGMUtil::DumpCmtyVV(OutFPrx + "INIT_cmtyvv.txt", InitCmtyVV, NIDNameH);
+
+  // RAGM.InitFromFile("INIT_cmtyvv.txt");
+ 
+  //Done
   if (NumThreads == 1 || G->GetEdges() < 1000) {
     RAGM.MLEGradAscent(0.0001, 1000 * G->GetNodes(), "", StepAlpha, StepBeta);
   } else {

@@ -1,0 +1,7 @@
+--------
+/home/lig02im-12/FelipeSchreiber/LearningOnGraphs/attrAGM/src/snap/examples/bigclam/bigclam.Err
+Tue Mar  4 01:09:56 2025
+Execution stopped: GetInt(FldN, Val) [Reason:'Field 0 not INT.
+  0: '1,1'
+'], file ../../glib-core/ss.h, line 120
+--------

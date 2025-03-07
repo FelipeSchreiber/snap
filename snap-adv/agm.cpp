@@ -694,9 +694,18 @@ double TAGMUtil::GetConductance(const PUNGraph& Graph, const TIntSet& CmtyS, con
   }
   // get conductance
   if (Vol != Edges2) {
-    if (2 * Vol > Edges2) { Phi = Cut / double (Edges2 - Vol); }
-    else if (Vol == 0) { Phi = 0.0; }
-    else { Phi = Cut / double(Vol); }
+    if (2 * Vol > Edges2) 
+    { 
+      Phi = Cut / double (Edges2 - Vol); 
+    }
+    else if (Vol == 0) 
+    { 
+      Phi = 0.0; 
+    }
+    else 
+    { 
+      Phi = Cut / double(Vol); 
+    }
   } else {
     if (Vol == Edges2) { Phi = 1.0; }
   }

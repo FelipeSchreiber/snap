@@ -1,0 +1,11 @@
+WakeForest	FloridaState	NorthCarolinaState	Virginia	GeorgiaTech	Duke	NorthCarolina	Clemson	Maryland	
+TexasElPaso	FresnoState	Rice	SouthernMethodist	Nevada	SanJoseState	Tulsa	TexasChristian	Hawaii	
+Rutgers	VirginiaTech	BostonCollege	WestVirginia	Syracuse	Pittsburgh	Temple	MiamiFlorida	
+SanDiegoState	BrighamYoung	NewMexico	Wyoming	Utah	ColoradoState	AirForce	NevadaLasVegas	
+TexasTech	Baylor	TexasAM	Oklahoma	Texas	OklahomaState	
+Missouri	KansasState	Colorado	Kansas	IowaState	Nebraska	
+WashingtonState	SouthernCalifornia	ArizonaState	Arizona	UCLA	Washington	Oregon	Stanford	OregonState	California	
+SouthernMississippi	Cincinnati	Army	AlabamaBirmingham	Louisville	EastCarolina	Tulane	Houston	Memphis	
+Iowa	PennState	Northwestern	Wisconsin	OhioState	Minnesota	Illinois	Michigan	MichiganState	Indiana	Purdue	
+Tennessee	Alabama	Florida	Kentucky	Vanderbilt	SouthCarolina	MississippiState	Georgia	LouisianaState	Arkansas	Mississippi	Auburn	
+Kent	WesternMichigan	Akron	BowlingGreenState	Buffalo	CentralMichigan	Toledo	BallState	MiamiOhio	Ohio	Marshall	EasternMichigan	NorthernIllinois	

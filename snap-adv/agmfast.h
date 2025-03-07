@@ -27,6 +27,7 @@ public:
   void SetGraph(const PUNGraph& GraphPt);
   void SetRegCoef(const double _RegCoef) { RegCoef = _RegCoef; }
   double GetRegCoef() { return RegCoef; }
+  void InitFromFile(const TStr  InFNm);
   void RandomInit(const int InitComs);
   void NeighborComInit(const int InitComs);
   void SetCmtyVV(const TVec<TIntV>& CmtyVV);
